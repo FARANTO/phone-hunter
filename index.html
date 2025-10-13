@@ -16,8 +16,8 @@
 <nav class="bg-neutral text-neutral-content">
     <!-- Menu DropdownBar at top LEFT -->
     <div class="navbar bg-base-100 shadow-sm">
-        <div class="flex-none">
-        <button class="btn btn-square btn-ghost">
+        <div class="flex my-auto">
+    <button class="btn btn-square btn-ghost">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block h-5 w-5 stroke-current"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path> </svg>
     </button>
   </div>
@@ -29,12 +29,12 @@
 
 <!-- Search Input field for Big Screens -->
   <div class="hidden md:block absolute  left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
-      <input type="text" placeholder="Search" class="input border-gray-400
+      <input type="text" placeholder="Search" id="SearchPhone" class="input border-gray-400
       border-2 border-solid text-center w-120" />
     </div>
 
 <!-- Search Input Field for Small Screens -->
- <div class="w-full md:hidden ml-2">
+ <div class="w-full md:hidden ml-2 mx-auto">
       <input type="text" placeholder="Search" class="input border-gray-400 border-solid border-2 text-center w-full" />
     </div>
 
@@ -43,7 +43,51 @@
 <!-- Navbar End -->
     </header>
 
-<main>
+<main class="container">
+        <!-- display Search Result -->
+        <section>
+            <div id="phones-container" class="row row-cols-1 row-cols-md-3 g-4">
+
+            </div>
+            <div id="no-found-message" class="mt-4 d-none">
+                <h3 class="text-warning">No Phone Found. Please try a new search</h3>
+            </div>
+            <div id="show-all" class="text-center d-none">
+                <div id="btn-show-all" class="btn btn-primary">Show All</div>
+            </div>
+        </section>
+        <!-- loader -->
+        <section id="loader" class="d-none">
+            <div style="height: 400px;" class="d-flex justify-content-center align-items-center">
+                <div class="spinner-border  text-success" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </section>
+        <!-- modal contents -->
+        <section>
+            
+            <!-- Modal -->
+            <div class="modal fade" id="phoneDetailModal" tabindex="-1" aria-labelledby="phoneDetailModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="phoneDetailModalLabel"></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div id="phone-details" class="modal-body">
+                            
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+  
+
 
 </main>
 
