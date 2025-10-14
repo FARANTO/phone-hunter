@@ -1,5 +1,15 @@
+// === Display message before any search ===
+const displayInitialMessage = () => {
+  const phonesContainer = document.getElementById("phones-container");
+  phonesContainer.innerHTML = `
+    <div class="flex justify center text-center text-gray-500 mx-110 mt-10 w-full">
+      <h2 class="text-xl font-semibold"> Search your phone above to see results.</h2>
+    </div>
+  `;
+};
+
 // === Fetch and display phones ===
-const loadPhones = async (searchText = "iphone") => {
+const loadPhones = async (searchText) => {
   toggleLoader(true); // show loader
 
   try {
@@ -19,9 +29,9 @@ const loadPhones = async (searchText = "iphone") => {
 const displayPhones = (phones) => {
   const phonesContainer = document.getElementById("phones-container");
   const noFoundMessage = document.getElementById("no-found-message");
-  phonesContainer.innerHTML = ""; // clear container before adding new
+  phonesContainer.innerHTML = ""; // clear old data
 
-  if (phones.length === 0) {
+  if (!phones || phones.length === 0) {
     noFoundMessage.classList.remove("d-none");
   } else {
     noFoundMessage.classList.add("d-none");
@@ -62,11 +72,15 @@ const toggleLoader = (isLoading) => {
 document.getElementById("SearchPhone").addEventListener("keypress", function (e) {
   if (e.key === "Enter") {
     const searchText = e.target.value.trim();
+    if (searchText === "") {
+      displayInitialMessage();
+      return;
+    }
     loadPhones(searchText);
   }
 });
 
-// === Fetch and display phone details (when Show Details button clicked) ===
+// === Fetch and display phone details (for Show Details button) ===
 const loadPhoneDetails = async (id) => {
   try {
     const url = `https://openapi.programming-hero.com/api/phone/${id}`;
@@ -78,14 +92,11 @@ const loadPhoneDetails = async (id) => {
   }
 };
 
-// === Example function to show phone details (can be customized to fit your modal) ===
+// === Example modal content display ===
 const showPhoneDetails = (phone) => {
   console.log("Phone Details:", phone);
-  // Example: You can dynamically fill a modal or alert
   alert(`Model: ${phone.name}\nBrand: ${phone.brand}`);
 };
 
-// === Initial load ===
-loadPhones();
-
-
+// === Initial State: show "Search your phone" message ===
+displayInitialMessage();
