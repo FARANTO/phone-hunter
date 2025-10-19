@@ -2,7 +2,7 @@
 const displayInitialMessage = () => {
   const phonesContainer = document.getElementById("phones-container");
   phonesContainer.innerHTML = `
-    <div class="flex justify center text-center text-gray-500 mx-110 mt-10 w-full">
+    <div class="justify text-center text-gray-500 mx-132 w-full">
       <h2 class="text-xl font-semibold"> Search your phone above to see results.</h2>
     </div>
   `;
@@ -45,7 +45,7 @@ const displayPhones = (phones) => {
       <img src="${phone.image}" class="card-img-top" alt="${phone.phone_name}">
       <div class="card-body">
         <h5 class="card-title">${phone.phone_name}</h5>
-        <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.</p>
+        <p class="card-text">Click below to see details.</p>
         <button onclick="loadPhoneDetails('${phone.slug}')" 
                 class="btn btn-primary" 
                 data-bs-toggle="modal" 
