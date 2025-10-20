@@ -98,5 +98,23 @@ const showPhoneDetails = (phone) => {
   alert(`Model: ${phone.name}\nBrand: ${phone.brand}`);
 };
 
+
+
+// === Home Button: Reset to Initial State ===
+document.getElementById("home-btn").addEventListener("click", () => {
+  // Clear search input
+  document.getElementById("SearchPhone").value = "";
+
+  // Hide "no phone found" message
+  document.getElementById("no-found-message").classList.add("d-none");
+
+  // Hide loader (in case it's visible)
+  document.getElementById("loader").classList.add("d-none");
+
+  // Display initial message again
+  displayInitialMessage();
+});
+
+
 // === Initial State: show "Search your phone" message ===
 displayInitialMessage();
