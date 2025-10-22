@@ -115,6 +115,22 @@ document.getElementById("home-btn").addEventListener("click", () => {
   displayInitialMessage();
 });
 
+// === Toggle dropdown visibility when hamburger is clicked ===
+const dropdownToggle = document.getElementById("dropdown-toggle");
+const dropdownMenu = document.getElementById("dropdown-menu");
+
+dropdownToggle.addEventListener("click", (e) => {
+  e.stopPropagation(); // prevent closing immediately on click
+  dropdownMenu.classList.toggle("hidden");
+});
+
+// === Close dropdown if clicked outside ===
+document.addEventListener("click", (e) => {
+  if (!dropdownMenu.contains(e.target) && !dropdownToggle.contains(e.target)) {
+    dropdownMenu.classList.add("hidden");
+  }
+});
+
 
 // === Initial State: show "Search your phone" message ===
 displayInitialMessage();
