@@ -115,21 +115,40 @@ document.getElementById("home-btn").addEventListener("click", () => {
   displayInitialMessage();
 });
 
-// === Toggle dropdown visibility when hamburger is clicked ===
-const dropdownToggle = document.getElementById("dropdown-toggle");
-const dropdownMenu = document.getElementById("dropdown-menu");
+// // === Dropdown Toggle & Click Handlers ===
+const dropdownBtn = document.querySelector(".btn-ghost");
+const brandMenu = document.getElementById("brand-menu");
 
-dropdownToggle.addEventListener("click", (e) => {
-  e.stopPropagation(); // prevent closing immediately on click
-  dropdownMenu.classList.toggle("hidden");
+// Toggle show/hide when hamburger is clicked
+dropdownBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+  brandMenu.classList.toggle("hidden");
 });
 
-// === Close dropdown if clicked outside ===
+// Hide dropdown if clicking outside
 document.addEventListener("click", (e) => {
-  if (!dropdownMenu.contains(e.target) && !dropdownToggle.contains(e.target)) {
-    dropdownMenu.classList.add("hidden");
+  if (!dropdownBtn.contains(e.target) && !brandMenu.contains(e.target)) {
+    brandMenu.classList.add("hidden");
   }
 });
+
+// Handle brand item clicks
+brandMenu.addEventListener("click", (e) => {
+  e.preventDefault();
+  const item = e.target.closest(".brand-item");
+  if (!item) return;
+
+  const brand = item.dataset.brand;
+  brandMenu.classList.add("hidden"); // hide after selection
+
+  if (brand === "show-all") {
+    displayInitialMessage();
+    document.getElementById("SearchPhone").value = "";
+  } else {
+    loadPhones(brand);
+  }
+});
+
 
 
 // === Initial State: show "Search your phone" message ===
