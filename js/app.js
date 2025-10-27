@@ -3,13 +3,13 @@ const displayInitialMessage = () => {
   const phonesContainer = document.getElementById("phones-container");
   phonesContainer.innerHTML = `
     <div class="justify text-center text-gray-500 mx-132 w-full">
-      <h2 class="text-xl font-semibold"> Search your phone above to see results.</h2>
+      <h2 class="text-xl font-semibold">Search your phone above to see results.</h2>
     </div>
   `;
 };
 
 // === Fetch and display phones ===
-const loadPhones = async (searchText) => {
+const loadPhones = async (searchText, showAll = false) => {
   toggleLoader(true); // show loader
 
   try {
@@ -17,27 +17,36 @@ const loadPhones = async (searchText) => {
     const res = await fetch(url);
     const data = await res.json();
 
-    displayPhones(data.data);
+    // Wait for 3 seconds before displaying
+    setTimeout(() => {
+      displayPhones(data.data, showAll);
+      toggleLoader(false);
+    }, 3000);
   } catch (error) {
     console.error("Error fetching phone data:", error);
-  } finally {
-    toggleLoader(false); // hide loader after done
+    toggleLoader(false);
   }
 };
 
 // === Display phones in the DOM ===
-const displayPhones = (phones) => {
+const displayPhones = (phones, showAll = false) => {
   const phonesContainer = document.getElementById("phones-container");
   const noFoundMessage = document.getElementById("no-found-message");
+  const showAllSection = document.getElementById("show-all");
   phonesContainer.innerHTML = ""; // clear old data
 
   if (!phones || phones.length === 0) {
     noFoundMessage.classList.remove("d-none");
+    showAllSection.classList.add("d-none");
+    return;
   } else {
     noFoundMessage.classList.add("d-none");
   }
 
-  phones.forEach((phone) => {
+  // If more than 10 phones, show only 10 unless showAll is true
+  const limitedPhones = showAll ? phones : phones.slice(0, 10);
+
+  limitedPhones.forEach((phone) => {
     const phoneDiv = document.createElement("div");
     phoneDiv.classList.add("card", "p-4");
 
@@ -56,6 +65,18 @@ const displayPhones = (phones) => {
     `;
     phonesContainer.appendChild(phoneDiv);
   });
+
+  // Handle Show All button visibility
+  if (phones.length > 10 && !showAll) {
+    showAllSection.classList.remove("d-none");
+    const btnShowAll = document.getElementById("btn-show-all");
+    btnShowAll.onclick = () => {
+      displayPhones(phones, true);
+      showAllSection.classList.add("d-none");
+    };
+  } else {
+    showAllSection.classList.add("d-none");
+  }
 };
 
 // === Show/Hide Loader ===
@@ -92,54 +113,55 @@ const loadPhoneDetails = async (id) => {
   }
 };
 
-// === Example modal content display ===
+// === Modal content display ===
 const showPhoneDetails = (phone) => {
-  console.log("Phone Details:", phone);
-  alert(`Model: ${phone.name}\nBrand: ${phone.brand}`);
+  const modalTitle = document.getElementById("phoneDetailModalLabel");
+  const modalBody = document.getElementById("phone-details");
+
+  modalTitle.textContent = phone.name || "No Name Found";
+
+  const { storage, memory, displaySize, chipSet } = phone.mainFeatures || {};
+
+  modalBody.innerHTML = `
+    <p><strong>Brand:</strong> ${phone.brand || "N/A"}</p>
+    <p><strong>Storage:</strong> ${storage || "N/A"}</p>
+    <p><strong>Memory:</strong> ${memory || "N/A"}</p>
+    <p><strong>Display Size:</strong> ${displaySize || "N/A"}</p>
+    <p><strong>Chipset:</strong> ${chipSet || "N/A"}</p>
+  `;
 };
-
-
 
 // === Home Button: Reset to Initial State ===
 document.getElementById("home-btn").addEventListener("click", () => {
-  // Clear search input
   document.getElementById("SearchPhone").value = "";
-
-  // Hide "no phone found" message
   document.getElementById("no-found-message").classList.add("d-none");
-
-  // Hide loader (in case it's visible)
   document.getElementById("loader").classList.add("d-none");
-
-  // Display initial message again
+  document.getElementById("show-all").classList.add("d-none");
   displayInitialMessage();
 });
 
-// // === Dropdown Toggle & Click Handlers ===
+// === Dropdown Toggle & Click Handlers ===
 const dropdownBtn = document.querySelector(".btn-ghost");
 const brandMenu = document.getElementById("brand-menu");
 
-// Toggle show/hide when hamburger is clicked
 dropdownBtn.addEventListener("click", (e) => {
   e.stopPropagation();
   brandMenu.classList.toggle("hidden");
 });
 
-// Hide dropdown if clicking outside
 document.addEventListener("click", (e) => {
   if (!dropdownBtn.contains(e.target) && !brandMenu.contains(e.target)) {
     brandMenu.classList.add("hidden");
   }
 });
 
-// Handle brand item clicks
 brandMenu.addEventListener("click", (e) => {
   e.preventDefault();
   const item = e.target.closest(".brand-item");
   if (!item) return;
 
   const brand = item.dataset.brand;
-  brandMenu.classList.add("hidden"); // hide after selection
+  brandMenu.classList.add("hidden");
 
   if (brand === "show-all") {
     displayInitialMessage();
@@ -148,8 +170,6 @@ brandMenu.addEventListener("click", (e) => {
     loadPhones(brand);
   }
 });
-
-
 
 // === Initial State: show "Search your phone" message ===
 displayInitialMessage();
