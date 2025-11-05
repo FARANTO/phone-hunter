@@ -55,9 +55,9 @@ const displayPhones = (phones, showAll = false) => {
       <div class="card-body">
         <h5 class="card-title">${phone.phone_name}</h5>
         <p class="card-text">Click below to see details.</p>
-        <button onclick="loadPhoneDetails('${phone.slug}')" 
-                class="btn btn-primary" 
-                data-bs-toggle="modal" 
+        <button onclick="loadPhoneDetails('${phone.slug}')"
+                class="btn btn-primary"
+                data-bs-toggle="modal"
                 data-bs-target="#phoneDetailModal">
           Show Details
         </button>
@@ -89,17 +89,58 @@ const toggleLoader = (isLoading) => {
   }
 };
 
-// === Search Handler ===
-document.getElementById("SearchPhone").addEventListener("keypress", function (e) {
+// === Search logic (Enter key + Search button) ===
+const searchInput = document.getElementById("SearchPhone");
+
+const handleSearch = () => {
+  const searchText = searchInput.value.trim();
+  if (searchText === "") {
+    displayInitialMessage();
+    return;
+  }
+
+  // Show loader immediately
+  toggleLoader(true);
+  // Small delay to ensure loader visibly appears before fetch
+  setTimeout(() => loadPhones(searchText), 300);
+};
+
+// Trigger search on Enter key
+searchInput.addEventListener("keypress", function (e) {
   if (e.key === "Enter") {
-    const searchText = e.target.value.trim();
-    if (searchText === "") {
-      displayInitialMessage();
-      return;
-    }
-    loadPhones(searchText);
+    handleSearch();
   }
 });
+
+// === Add Search Button dynamically ===
+const addSearchButton = () => {
+  // For desktop search input
+  const desktopSearchField = document.getElementById("SearchPhone");
+  if (desktopSearchField && !document.getElementById("search-btn")) {
+    const btn = document.createElement("button");
+    btn.id = "search-btn";
+    btn.textContent = "Search";
+    btn.className = "btn btn-success ml-2";
+    btn.addEventListener("click", handleSearch);
+
+    desktopSearchField.insertAdjacentElement("afterend", btn);
+  }
+
+  // For mobile search input (below input field)
+  const mobileInput = document.querySelector(".md\\:hidden input");
+  if (mobileInput && !document.getElementById("mobile-search-btn")) {
+    const btn = document.createElement("button");
+    btn.id = "mobile-search-btn";
+    btn.textContent = "Search";
+    btn.className = "btn btn-success w-full mt-2";
+    btn.addEventListener("click", handleSearch);
+
+    mobileInput.insertAdjacentElement("afterend", btn);
+  }
+};
+
+// Run after DOM is fully loaded
+document.addEventListener("DOMContentLoaded", addSearchButton);
 
 // === Fetch and display phone details (for Show Details button) ===
 const loadPhoneDetails = async (id) => {
