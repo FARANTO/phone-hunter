@@ -9,7 +9,7 @@
 
    
     <title>Phone Hunter</title>
-</head>
+<!-- </head> -->
 <body>
     <header>
 <!-- Daisy UI taken navbar simple edit for search text field -->
@@ -47,15 +47,16 @@
   </div>
 
 <!-- Search Input field for Big Screens -->
-  <div class="hidden md:block absolute  left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
-      <input type="text" placeholder="Search" id="SearchPhone" class="input border-gray-400
-      border-2 border-solid text-center w-120" />
-    </div>
+  <div class="hidden md:flex absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 items-center gap-2">
+  <input type="text" placeholder="Search" id="SearchPhone" class="input border-gray-400 border-2 border-solid text-center w-96" />
+  <button id="search-btn" class="btn btn-primary">Search</button>
+</div>
 
 <!-- Search Input Field for Small Screens -->
- <div class="w-full md:hidden ml-2 mx-auto">
-      <input type="text" placeholder="Search" class="input border-gray-400 border-solid border-2 text-center w-full" />
-    </div>
+<div class="w-full md:hidden ml-2 mx-auto flex gap-2">
+  <input type="text" placeholder="Search" id="SearchPhoneMobile" class="input border-gray-400 border-solid border-2 text-center w-full" />
+  <button id="search-btn-mobile" class="btn btn-primary">Search</button>
+</div>
 
 </div>
 </nav>
@@ -65,7 +66,7 @@
 <main class="container">
         <!-- display Search Result -->
         <section>
-            <div id="phones-container" class="row row-cols-1 row-cols-md-5 g-4">
+            <div id="phones-container" class="flex items-center justify-center row row-cols-1 row-cols-md-5 g-4">
 
             </div>
             <div id="no-found-message" class="mt-4 d-none">
